@@ -765,7 +765,9 @@ proc request*(client: AsyncHttpClient, url: string, httpMethod = httpGET,
   ## connection can be closed by using the ``close`` procedure.
   ##
   ## The returned future will complete once the request is completed.
-  let r = parseUri(url)
+  var r = parseUri(url)
+  if r.path == "":
+    r.path = "/"
   await newConnection(client, r)
 
   if not client.headers.hasKey("user-agent") and client.userAgent != "":
